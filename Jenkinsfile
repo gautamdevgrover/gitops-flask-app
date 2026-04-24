@@ -21,6 +21,7 @@ stages {
             script {
                 sh """
                 docker build -t $DOCKER_IMAGE:$IMAGE_TAG .
+                docker tag $DOCKER_IMAGE:$IMAGE_TAG $DOCKER_IMAGE:latest
                 """
             }
         }
