@@ -19,7 +19,8 @@ stages {
     stage('Build Docker Image') {
         steps {
             script {
-                docker.build("${DOCKER_IMAGE}:${IMAGE_TAG}")
+                sh """
+                docker build -t $DOCKER_IMAGE:$IMAGE_TAG .
             }
         }
     }
