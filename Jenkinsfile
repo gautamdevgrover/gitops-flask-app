@@ -21,6 +21,7 @@ stages {
             script {
                 sh """
                 docker build -t $DOCKER_IMAGE:$IMAGE_TAG .
+                """
             }
         }
     }
@@ -29,7 +30,7 @@ stages {
         steps {
             script {
                 sh """
-                docker run -d -p 5000:5000 --name test-container ${DOCKER_IMAGE}:${IMAGE_TAG}
+                docker run -d -p 5000:5000 --name test-container $DOCKER_IMAGE:$IMAGE_TAG
                 sleep 5
                 """
             }
