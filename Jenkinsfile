@@ -75,6 +75,7 @@ stages {
 
                     docker logout
                     """
+                    }
                 }
             }
         }
