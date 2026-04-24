@@ -1,7 +1,6 @@
 pipeline {
 agent any
 
-```
 environment {
     DOCKER_IMAGE = "gautamdevgrover/gitops-flask-app"
     IMAGE_TAG = "${BUILD_NUMBER}"
@@ -106,7 +105,7 @@ post {
         echo "❌ Pipeline failed during testing or deployment!"
     }
 }
-```
+
 
 }
 
