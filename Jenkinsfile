@@ -60,8 +60,6 @@ stages {
 
     stage('Push Docker Image') {
         steps {
-            script {
-                sh """
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-cred',
                     usernameVariable: 'USER',
@@ -74,12 +72,10 @@ stages {
                     docker push $DOCKER_IMAGE:latest
 
                     docker logout
-                    """
-                    }
+                    '''
                 }
             }
         }
-    }
 
     stage('Update GitOps Repo') {
         steps {
