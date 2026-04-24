@@ -61,8 +61,20 @@ stages {
     stage('Push Docker Image') {
         steps {
             script {
-                docker.withRegistry('', 'dockerhub-cred') {
-                    docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").push()
+                sh """
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-cred',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS')]) {
+
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+
+                    docker push $DOCKER_IMAGE:$IMAGE_TAG
+                    docker push $DOCKER_IMAGE:latest
+
+                    docker logout
+                    """
                 }
             }
         }
