@@ -85,7 +85,7 @@ stages {
             script {
                 sh """
                 rm -rf gitops-repo
-                git clone ${GITOPS_REPO} gitops-repo
+                git clone $GITOPS_REPO gitops-repo
 
                 git config --global --add safe.directory $(pwd)/gitops-repo
 
