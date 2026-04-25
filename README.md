@@ -120,9 +120,12 @@ https://<EC2-IP>:8443
 
 ```
 gitops-flask-app/
-├── app.py
 ├── Dockerfile
 ├── Jenkinsfile
+├── README.md
+├── app.py
+└── requirements.txt
+
 ```
 
 ```
