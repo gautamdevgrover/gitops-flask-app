@@ -108,7 +108,7 @@ stages {
                 rm -rf gitops-repo
                 git clone https://$GIT_USER:$GIT_PASS@github.com/gautamdevgrover/gitops-flask-app-manifests.git gitops-repo
 
-                git config --global --add safe.directory $(pwd)/gitops-repo
+                git config --global --add safe.directory ${WORKSPACE}/gitops-repo
 
                 cd gitops-repo
 
