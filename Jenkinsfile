@@ -4,7 +4,7 @@ agent any
 environment {
     DOCKER_IMAGE = "gautamdevgrover/gitops-flask-app"
     IMAGE_TAG = "${BUILD_NUMBER}"
-    GITOPS_REPO = "https://github.com/gautamdevgrover/gitops-flask-app-manifests.git"
+    GITOPS_REPO = "https://${GIT_USER}:${GIT_PASS}@github.com/gautamdevgrover/gitops-flask-app-manifests.git"
     GITOPS_BRANCH = "main"
 }
 
@@ -83,6 +83,7 @@ stages {
     stage('Update GitOps Repo') {
         steps {
             script {
+              withCredentials([usernamePassword(credentialsId: 'gitops-repo-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                 sh """
                 rm -rf gitops-repo
                 git clone $GITOPS_REPO gitops-repo
@@ -101,6 +102,7 @@ stages {
                 git commit -m "Update image to ${IMAGE_TAG}"
                 git push origin ${GITOPS_BRANCH}
                 """
+                }
             }
         }
     }
