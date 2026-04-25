@@ -86,8 +86,8 @@ stages {
                 git clone ${GITOPS_REPO} gitops-repo
                 cd gitops-repo
 
-                sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|" deployment.yaml
-                sed -i "s|value: \\".*\\"|value: \\"${IMAGE_TAG}\\"|" deployment.yaml
+                sed -i "s/tag:.*/tag: \"${BUILD_NUMBER}\"/" flask-app/values.yaml
+                sed -i "s/version:.*/version: \"${BUILD_NUMBER}\"/" flask-app/values.yaml             
 
                 git config user.email "gautamdevgrover@gmail.com"
                 git config user.name "gautamdevgrover"

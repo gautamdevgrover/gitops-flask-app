@@ -8,7 +8,7 @@ VERSION = os.getenv("APP_VERSION", "v1")
 
 @app.route("/")
 def home():
-    return f"🚀 Flask App is running testddd2 Version: {VERSION}"
+    return f"🚀 Flask App is running. Version: {VERSION}"
 
 @app.route("/health")
 def health():
