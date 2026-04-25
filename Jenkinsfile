@@ -87,7 +87,7 @@ stages {
                 rm -rf gitops-repo
                 git clone $GITOPS_REPO gitops-repo
 
-                git config --global --add safe.directory $(pwd)/gitops-repo
+                git config --global --add safe.directory /var/lib/jenkins/workspace/gitops-node-app-pipeline/gitops-repo
 
                 cd gitops-repo
 
