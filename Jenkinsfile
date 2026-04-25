@@ -106,7 +106,7 @@ stages {
               withCredentials([usernamePassword(credentialsId: 'gitops-repo-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                 sh """
                 rm -rf gitops-repo
-                git clone https://${GIT_USER}:${GIT_PASS}@github.com/gautamdevgrover/gitops-flask-app-manifests.git gitops-repo
+                git clone https://$GIT_USER:$GIT_PASS@github.com/gautamdevgrover/gitops-flask-app-manifests.git gitops-repo
 
                 git config --global --add safe.directory $(pwd)/gitops-repo
 
