@@ -34,22 +34,42 @@ stages {
                 docker stop test-container --signal KILL || true
                 docker rm test-container || true
                 docker run -d -p 5001:5000 --name test-container $DOCKER_IMAGE:$IMAGE_TAG
+                """
+            }
+        }
+    }
+
+    stage('Run Tests') {
+            steps {
+                sh '''
+                set -e
+
+                docker rm -f test-container || true
+
+                docker run -d --name test-container -p 5001:5000 $DOCKER_IMAGE:$IMAGE_TAG
+                echo "Waiting for container to start..."
                 sleep 5
-                """
+                success=false
+
+                for i in {1..10}; do
+                  if curl -f http://localhost:5001/health; then
+                    echo "App is healthy ✅"
+                    success=true
+                    break
+                  fi
+                  echo "Waiting for app..."
+                  sleep 2
+                done
+
+                docker rm -f test-container || true
+
+                if [ "$success" = false ]; then
+                  echo "Health check failed ❌"
+                  exit 1
+                fi
+                '''
             }
         }
-    }
-
-    stage('Test Application') {
-        steps {
-            script {
-                sh """
-                curl -f http://localhost:5001/health
-                """
-            }
-        }
-    }
-
     stage('Cleanup Test Container') {
         steps {
             script {
@@ -88,7 +108,7 @@ stages {
                 rm -rf gitops-repo
                 git clone https://${GIT_USER}:${GIT_PASS}@github.com/gautamdevgrover/gitops-flask-app-manifests.git gitops-repo
 
-                git config --global --add safe.directory /var/lib/jenkins/workspace/gitops-node-app-pipeline/gitops-repo
+                git config --global --add safe.directory $(pwd)/gitops-repo
 
                 cd gitops-repo
 
@@ -99,7 +119,7 @@ stages {
                 git config user.name "gautamdevgrover"
 
                 git add .
-                git commit -m "Update image to ${IMAGE_TAG}"
+                git commit -m "Update image to ${IMAGE_TAG}" || echo "No changes to commit"
                 git push origin ${GITOPS_BRANCH}
                 """
                 }
