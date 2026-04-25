@@ -31,6 +31,8 @@ stages {
         steps {
             script {
                 sh """
+                docker stop test-container --signal KILL || true
+                docker rm test-container || true
                 docker run -d -p 5000:5000 --name test-container $DOCKER_IMAGE:$IMAGE_TAG
                 sleep 5
                 """
