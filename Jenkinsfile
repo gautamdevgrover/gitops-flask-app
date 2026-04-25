@@ -86,6 +86,9 @@ stages {
                 sh """
                 rm -rf gitops-repo
                 git clone ${GITOPS_REPO} gitops-repo
+
+                git config --global --add safe.directory $(pwd)/gitops-repo
+
                 cd gitops-repo
 
                 sed -i "s/tag:.*/tag: \"${BUILD_NUMBER}\"/" flask-app/values.yaml
