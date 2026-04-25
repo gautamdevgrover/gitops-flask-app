@@ -109,22 +109,72 @@ stages {
 }
 
 post {
-    always {
-        sh """
-        docker stop test-container || true
-        docker rm test-container || true
-        """
-    }
+        success {
+            emailext (
+                subject: "✅ SUCCESS: Build #${BUILD_NUMBER}",
+                mimeType: 'text/html',
+                body: """
+                <html>
+                <body style="font-family: Arial;">
 
-    success {
-        echo "✅ Build ${BUILD_NUMBER} tested and deployed successfully!"
-    }
+                    <h2 style="color: green;">Build Successful 🚀</h2>
 
-    failure {
-        echo "❌ Pipeline failed during testing or deployment!"
+                    <table border="1" cellpadding="10" cellspacing="0">
+                        <tr>
+                            <th>Project</th>
+                            <td>${JOB_NAME}</td>
+                        </tr>
+                        <tr>
+                            <th>Build Number</th>
+                            <td>${BUILD_NUMBER}</td>
+                        </tr>
+                        <tr>
+                            <th>Docker Image</th>
+                            <td>${DOCKER_IMAGE}</td>
+                        </tr>
+                    </table>
+
+                    <br>
+
+                    <a href="${BUILD_URL}" style="color: blue;">
+                        🔗 View Build Details
+                    </a>
+
+                </body>
+                </html>
+                """,
+                to: "gautamaws777@gmail.com"
+            )
+        }
+
+        failure {
+            emailext (
+                subject: "❌ FAILED: Build #${BUILD_NUMBER}",
+                mimeType: 'text/html',
+                body: """
+                <html>
+                <body style="font-family: Arial;">
+
+                    <h2 style="color: red;">Build Failed ❌</h2>
+
+                    <p><b>Project:</b> ${JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${BUILD_NUMBER}</p>
+
+                    <a href="${BUILD_URL}" style="color: blue;">
+                        🔗 Check Logs
+                    </a>
+
+                </body>
+                </html>
+                """,
+                to: "gautamaws777@gmail.com"
+            )
+        }
+
+        always {
+            sh 'docker rm -f test-container || true'
+        }
     }
 }
-
-
 }
 
