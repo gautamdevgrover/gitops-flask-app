@@ -33,7 +33,7 @@ stages {
                 sh """
                 docker stop test-container --signal KILL || true
                 docker rm test-container || true
-                docker run -d -p 5000:5000 --name test-container $DOCKER_IMAGE:$IMAGE_TAG
+                docker run -d -p 5001:5000 --name test-container $DOCKER_IMAGE:$IMAGE_TAG
                 sleep 5
                 """
             }
@@ -44,7 +44,7 @@ stages {
         steps {
             script {
                 sh """
-                curl -f http://localhost:5000/health
+                curl -f http://localhost:5001/health
                 """
             }
         }
